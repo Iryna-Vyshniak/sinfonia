@@ -1,10 +1,11 @@
 import { MainLayout } from "./components/layout/MainLayout"
+import Hero from "./components/sections/Hero";
 
 
 function App() {
   return (
     <MainLayout>
-      Main Landing Content
+      <Hero />
     </MainLayout>
   )
 }
