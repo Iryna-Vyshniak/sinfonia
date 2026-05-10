@@ -9,6 +9,7 @@ interface SectionHeaderProps {
     align?: 'left' | 'center';
     className?: string;
     dark?: boolean;
+    id?: string;
 }
 
 export function SectionHeader({
@@ -18,6 +19,7 @@ export function SectionHeader({
     align = 'left',
     className,
     dark = false,
+    id,
 }: SectionHeaderProps) {
     const containerVariants: Variants = {
         hidden: { opacity: 0, y: 20 },
@@ -39,6 +41,7 @@ export function SectionHeader({
 
     return (
         <motion.header
+            id={id}
             variants={containerVariants}
             initial="hidden"
             whileInView="visible"
