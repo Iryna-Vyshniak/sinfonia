@@ -4,6 +4,8 @@ import Hero from "./components/sections/Hero";
 import About from "./components/sections/About";
 import Gallery from "./components/sections/Gallery";
 import Testimonials from "./components/sections/Testimonials";
+import  Repertoire  from "./components/sections/Repertoire";
+import Tour  from "./components/sections/Tour";
 
 
 function App() {
@@ -13,6 +15,8 @@ function App() {
       <About />
       <Gallery />
       <Testimonials />
+      <Repertoire />
+      <Tour />
     </MainLayout>
   )
 }
