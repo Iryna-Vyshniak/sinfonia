@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { LuX } from 'react-icons/lu';
 
@@ -80,71 +80,80 @@ interface MaestroGalleryProps {
 }
 
 export function MaestroGallery({ isOpen, onClose }: MaestroGalleryProps) {
-    // FIX: Explicitly type the refs with their corresponding HTML element types
     const modalRef = useRef<HTMLDivElement>(null);
     const closeButtonRef = useRef<HTMLButtonElement>(null);
+    const previousFocusRef = useRef<HTMLElement | null>(null);
 
-    // Handle Escape key to close
-    const handleKeyDown = useCallback((e: KeyboardEvent) => {
-        if (e.key === 'Escape') {
-            onClose();
-        }
-    }, [onClose]);
-
-    // Trap focus inside the modal for a11y
+    // Trap focus, handle Escape key, and restore focus on close
     useEffect(() => {
-        const focusableElements = 'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])';
-        const modal = modalRef.current;
+        if (isOpen) {
+            previousFocusRef.current = document.activeElement as HTMLElement;
 
-        if (!isOpen || !modal) return;
-
-        const focusableContent = modal.querySelectorAll<HTMLElement>(focusableElements);
-        if (focusableContent.length === 0) return;
-
-        const firstFocusableElement = focusableContent[0];
-        const lastFocusableElement = focusableContent[focusableContent.length - 1];
-
-        const handleFocusTrap = (e: KeyboardEvent) => {
-            if (e.key !== 'Tab') return;
-
-            if (e.shiftKey) {
-                if (document.activeElement === firstFocusableElement) {
-                    lastFocusableElement.focus();
-                    e.preventDefault();
+            const handleKeyDown = (e: KeyboardEvent) => {
+                if (e.key === 'Escape') {
+                    onClose();
+                    return;
                 }
-            } else {
-                if (document.activeElement === lastFocusableElement) {
-                    firstFocusableElement.focus();
-                    e.preventDefault();
-                }
-            }
-        };
 
-        // Focus the close button when opened
-        if (closeButtonRef.current) {
-            closeButtonRef.current.focus();
+                if (e.key === 'Tab' && modalRef.current) {
+                    const focusableElements = 'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])';
+                    const focusableContent = Array.from(modalRef.current.querySelectorAll<HTMLElement>(focusableElements))
+                        .filter(el => {
+                            const style = window.getComputedStyle(el);
+                            return style.display !== 'none' && style.visibility !== 'hidden' && el.getAttribute('tabindex') !== '-1';
+                        });
+
+                    if (focusableContent.length === 0) return;
+
+                    const firstFocusableElement = focusableContent[0];
+                    const lastFocusableElement = focusableContent[focusableContent.length - 1];
+
+                    if (e.shiftKey) {
+                        if (document.activeElement === firstFocusableElement) {
+                            lastFocusableElement.focus();
+                            e.preventDefault();
+                        }
+                    } else {
+                        if (document.activeElement === lastFocusableElement) {
+                            firstFocusableElement.focus();
+                            e.preventDefault();
+                        }
+                    }
+                }
+            };
+
+            document.addEventListener('keydown', handleKeyDown);
+
+            // Focus the close button when opened
+            const focusTimer = setTimeout(() => {
+                if (closeButtonRef.current) {
+                    closeButtonRef.current.focus();
+                } else if (modalRef.current) {
+                    modalRef.current.focus();
+                }
+            }, 100);
+
+            return () => {
+                clearTimeout(focusTimer);
+                document.removeEventListener('keydown', handleKeyDown);
+                if (previousFocusRef.current) {
+                    previousFocusRef.current.focus();
+                }
+            };
         }
+    }, [isOpen, onClose]);
 
-        document.addEventListener('keydown', handleFocusTrap);
-        return () => {
-            document.removeEventListener('keydown', handleFocusTrap);
-        };
-    }, [isOpen]);
-
-    // Prevent body scrolling and add global esc listener
+    // Handle body scroll locking cleanly and robustly
     useEffect(() => {
         if (isOpen) {
             document.body.style.overflow = 'hidden';
-            document.addEventListener('keydown', handleKeyDown);
         } else {
-            document.body.style.overflow = 'unset';
-            document.removeEventListener('keydown', handleKeyDown);
+            document.body.style.overflow = '';
         }
         return () => {
-            document.body.style.overflow = 'unset';
-            document.removeEventListener('keydown', handleKeyDown);
+            document.body.style.overflow = '';
         };
-    }, [isOpen, handleKeyDown]);
+    }, [isOpen]);
 
     return (
         <AnimatePresence>
@@ -156,7 +165,6 @@ export function MaestroGallery({ isOpen, onClose }: MaestroGalleryProps) {
                     className="fixed inset-0 z-50 flex items-center justify-center p-4 md:p-8 bg-black/95 backdrop-blur-xl"
                     role="presentation"
                 >
-                    {/* Close Background - Improved with keyboard support */}
                     <div
                         className="absolute inset-0 cursor-pointer"
                         onClick={onClose}
@@ -204,7 +212,6 @@ export function MaestroGallery({ isOpen, onClose }: MaestroGalleryProps) {
                             tabIndex={0}
                             aria-label="Musicians list scrollable area"
                         >
-                            {/* Semantic List */}
                             <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-8 md:gap-12 lg:gap-16 list-none m-0 p-0">
                                 {musicians.map((musician, idx) => (
                                     <motion.li
