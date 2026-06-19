@@ -165,6 +165,7 @@ export function MaestroGallery({ isOpen, onClose }: MaestroGalleryProps) {
                     className="fixed inset-0 z-50 flex items-center justify-center p-4 md:p-8 bg-black/95 backdrop-blur-xl"
                     role="presentation"
                 >
+        
                     <div
                         className="absolute inset-0 cursor-pointer"
                         onClick={onClose}
@@ -172,7 +173,6 @@ export function MaestroGallery({ isOpen, onClose }: MaestroGalleryProps) {
                         tabIndex={-1}
                     ></div>
 
-                    {/* Modal Content Area */}
                     <motion.div
                         ref={modalRef}
                         role="dialog"
@@ -212,6 +212,7 @@ export function MaestroGallery({ isOpen, onClose }: MaestroGalleryProps) {
                             tabIndex={0}
                             aria-label="Musicians list scrollable area"
                         >
+                            {/* Semantic List */}
                             <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-8 md:gap-12 lg:gap-16 list-none m-0 p-0">
                                 {musicians.map((musician, idx) => (
                                     <motion.li
@@ -220,32 +221,33 @@ export function MaestroGallery({ isOpen, onClose }: MaestroGalleryProps) {
                                         animate={{ opacity: 1, y: 0 }}
                                         transition={{ delay: idx * 0.05 + 0.2, duration: 0.8, ease: "easeOut" }}
                                         className={cn(
-                                            "flex flex-col gap-6 group p-4 md:p-6 bg-white/2 hover:bg-white/5 transition-all duration-500 border border-white/5 hover:border-gold-light/20 rounded-2xl shadow-lg",
+                                            "flex flex-col gap-6 group p-4 md:p-6 bg-white/2 hover:bg-white/5 focus:bg-white/5 transition-all duration-500 border border-white/5 hover:border-gold-light/20 focus:border-gold-light/20 rounded-2xl shadow-lg cursor-pointer outline-none",
                                             musician.wide ? "lg:col-span-3 md:col-span-2" : "lg:col-span-2"
                                         )}
+                                        tabIndex={0}
                                     >
                                         {/* Semantic Article for standalone content blocks */}
-                                        <article className="flex flex-col h-full">
+                                        <article className="flex flex-col h-full pointer-events-none">
                                             {/* Semantic Figure */}
                                             <figure className={cn(
                                                 "relative overflow-hidden rounded-xl shadow-2xl transition-all duration-700 m-0",
                                                 musician.wide ? "aspect-video" : "aspect-4/5"
                                             )}>
-                                                <div className="absolute inset-0 border-[0.5px] border-gold-light/20 z-20 m-4 pointer-events-none transition-all duration-500 group-hover:m-3" aria-hidden="true"></div>
-                                                <div className="absolute inset-0 bg-linear-to-t from-black/60 to-transparent z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-500" aria-hidden="true"></div>
+                                                <div className="absolute inset-0 border-[0.5px] border-gold-light/20 z-20 m-4 transition-all duration-500 group-hover:m-3 group-focus:m-3" aria-hidden="true"></div>
+                                                <div className="absolute inset-0 bg-linear-to-t from-black/60 to-transparent z-10 opacity-0 group-hover:opacity-100 group-focus:opacity-100 transition-opacity duration-500" aria-hidden="true"></div>
 
                                                 <img
                                                     src={musician.image}
                                                     alt={musician.name ? `Portrait of ${musician.name}, ${musician.role}` : ""}
                                                     loading="lazy"
-                                                    className="w-full h-full object-cover grayscale opacity-70 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-1000 scale-100 group-hover:scale-110"
+                                                    className="w-full h-full object-cover grayscale opacity-70 group-hover:grayscale-0 group-focus:grayscale-0 group-hover:opacity-100 group-focus:opacity-100 transition-all duration-1000 scale-100 group-hover:scale-110 group-focus:scale-110"
                                                 />
                                             </figure>
 
                                             {/* Content Block */}
                                             <div className="px-2 pb-2 mt-4 flex flex-col grow">
                                                 <header className="flex flex-col gap-1 mb-4">
-                                                    <h3 id={`musician-name-${idx}`} tabIndex={0} className="text-xl md:text-2xl font-serif text-ivory tracking-wide group-hover:text-gold-light transition-colors duration-300">
+                                                    <h3 id={`musician-name-${idx}`} className="text-xl md:text-2xl font-serif text-ivory tracking-wide group-hover:text-gold-light group-focus:text-gold-light transition-colors duration-300">
                                                         {musician.name}
                                                     </h3>
                                                     <p className="text-gold-light/80 uppercase tracking-[0.2em] text-[9px] font-bold m-0">
@@ -261,11 +263,8 @@ export function MaestroGallery({ isOpen, onClose }: MaestroGalleryProps) {
                                 ))}
                             </ul>
 
-                            {/* Padding Bottom for scroll comfort */}
                             <div className="h-24" aria-hidden="true"></div>
-                        </div>
-
-                        {/* Ambient Background Accents */}
+                        </div> {/* Ambient Background Accents */}
                         <div className="absolute top-0 right-0 p-32 opacity-10 pointer-events-none" aria-hidden="true">
                             <div className="w-96 h-96 rounded-full bg-gold-light blur-[120px]"></div>
                         </div>

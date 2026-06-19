@@ -107,28 +107,25 @@ export default function Gallery() {
                                 whileInView={{ opacity: 1, scale: 1 }}
                                 viewport={{ once: true }}
                                 transition={{ duration: 0.6, delay: i * 0.1 }}
-                                className="w-70 md:w-100 h-87.5 md:h-125 relative overflow-hidden group border border-white/5 shrink-0"
+                                className="w-70 md:w-100 h-87.5 md:h-125 relative overflow-hidden group border border-white/5 shrink-0 cursor-grab outline-none"
                                 aria-roledescription="slide"
                                 aria-label={`${i + 1} of ${galleryImages.length}`}
+                                tabIndex={0}
                             >
-                                {/* Semantic figure for image + caption pairing */}
-                                <figure className="m-0 w-full h-full relative">
-                                    {/* Swapped background-image for native img for SEO & Screen Readers */}
+                                <figure className="m-0 w-full h-full relative pointer-events-none">
                                     <img
                                         src={img.url}
                                         alt={`Photograph capturing: ${img.caption}`}
                                         loading={i < 3 ? "eager" : "lazy"} // Eager load LCP images, lazy load the rest
-                                        className="absolute inset-0 w-full h-full object-cover grayscale opacity-60 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-700 pointer-events-none"
+                                        className="absolute inset-0 w-full h-full object-cover grayscale opacity-60 group-hover:grayscale-0 group-focus:grayscale-0 group-hover:opacity-100 group-focus:opacity-100 group-hover:scale-110 group-focus:scale-110 transition-all duration-700 pointer-events-none"
                                     />
-
-                                    {/* Decorative gradient hidden from screen readers */}
                                     <div
-                                        className="absolute inset-0 bg-linear-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
+                                        className="absolute inset-0 bg-linear-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 group-focus:opacity-100 transition-opacity duration-500 pointer-events-none"
                                         aria-hidden="true"
                                     ></div>
 
                                     {/* Semantic figcaption */}
-                                    <figcaption className="absolute bottom-6 left-6 text-[10px] uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-all duration-500 translate-y-4 group-hover:translate-y-0 text-ivory pointer-events-none">
+                                    <figcaption className="absolute bottom-6 left-6 text-[10px] uppercase tracking-widest opacity-0 group-hover:opacity-100 group-focus:opacity-100 transition-all duration-500 translate-y-4 group-hover:translate-y-0 group-focus:translate-y-0 text-ivory pointer-events-none">
                                         <div className="w-6 h-px bg-gold-light mb-3" aria-hidden="true"></div>
                                         {img.caption}
                                     </figcaption>
