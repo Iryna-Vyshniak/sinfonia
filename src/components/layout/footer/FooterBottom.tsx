@@ -30,7 +30,7 @@ export function FooterBottom() {
             role="contentinfo" // Standard A11Y role for footer sections
         >
             <div className="flex flex-col items-center md:items-start gap-2">
-                <p className="text-[11px] uppercase tracking-[0.4em] text-ash/50">
+                <p className="text-[11px] uppercase tracking-[0.4em] text-ash/60">
                     &copy; {currentYear} Sinfonia Nobile Orchestra.
                     <span className="sr-only"> All Rights Reserved.</span>
                     <span aria-hidden="true"> All Rights Reserved.</span>
@@ -42,7 +42,7 @@ export function FooterBottom() {
                     <li>
                         <a
                             href="."
-                            className="text-[11px] uppercase tracking-[0.4em] text-ash/40 hover:text-gold-light focus-visible:outline focus-visible:outline-offset-4 focus-visible:outline-gold-light transition-colors duration-300"
+                            className="text-[11px] uppercase tracking-[0.4em] text-ash/60 hover:text-gold-light focus-visible:outline focus-visible:outline-offset-4 focus-visible:outline-gold-light transition-colors duration-300"
                         >
                             Privacy Policy
                         </a>
@@ -50,7 +50,7 @@ export function FooterBottom() {
                     <li>
                         <a
                             href="."
-                            className="text-[11px] uppercase tracking-[0.4em] text-ash/40 hover:text-gold-light focus-visible:outline focus-visible:outline-offset-4 focus-visible:outline-gold-light transition-colors duration-300"
+                            className="text-[11px] uppercase tracking-[0.4em] text-ash/60 hover:text-gold-light focus-visible:outline focus-visible:outline-offset-4 focus-visible:outline-gold-light transition-colors duration-300"
                         >
                             Terms of Service
                         </a>

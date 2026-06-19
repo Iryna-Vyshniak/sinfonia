@@ -42,7 +42,7 @@ export function FooterBrand() {
                     Sinfonia <span className="not-italic font-medium text-gold-light">Nobile</span>
                 </h2>
 
-                <p className="text-[11px] text-ash/60 uppercase tracking-[0.5em] font-medium leading-relaxed max-w-65">
+                <p className="text-[11px] text-ash/80 uppercase tracking-[0.5em] font-medium leading-relaxed max-w-65">
                     The <strong className="font-bold text-ivory">Zenith</strong> of Classical Artistry.
                     <span className="block mt-1">Performance. Poise. Perfection.</span>
                 </p>
@@ -56,7 +56,7 @@ export function FooterBrand() {
                                 href={href}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center text-ash/50 hover:text-gold-light hover:border-gold-light/30 focus-visible:outline focus-visible:outline-offset-4 focus-visible:outline-gold-light transition-all duration-500 group"
+                                className="w-10 h-10 rounded-full border border-white/20 flex items-center justify-center text-ash/50 hover:text-gold-light hover:border-gold-light/30 focus-visible:outline focus-visible:outline-offset-4 focus-visible:outline-gold-light transition-all duration-500 group"
                                 aria-label={label}
                             >
                                 <Icon

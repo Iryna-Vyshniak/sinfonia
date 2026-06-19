@@ -18,7 +18,7 @@ export function FooterNewsletter({ email, setEmail, onSubmit }: FooterNewsletter
         >
             <div className="space-y-4">
                 <h3 id="inner-circle-heading" className="text-[10px] uppercase tracking-[0.4em] text-gold-light font-bold">The Inner Circle</h3>
-                <p className="text-xs text-ash/50 italic font-serif leading-relaxed">
+                <p className="text-xs text-ash/90 italic font-serif leading-relaxed">
                     Receive invitations to private rehearsals and early access to digital scores.
                 </p>
             </div>
@@ -33,7 +33,7 @@ export function FooterNewsletter({ email, setEmail, onSubmit }: FooterNewsletter
                         autoComplete="email"
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
-                        className="w-full bg-transparent border-b border-white/10 py-4 text-xs font-sans tracking-wide text-ivory focus:outline-none focus:border-gold-light transition-all duration-700 placeholder-white/10"
+                        className="w-full bg-transparent border-b border-white/20 py-4 text-xs font-sans tracking-wide text-ivory focus:outline-none focus:border-gold-light hover:border-gold-light transition-all duration-700 placeholder-white/40"
                         aria-label="Email address for newsletter"
                     />
                     <div className="absolute bottom-0 left-0 w-0 h-px bg-gold-light transition-all duration-700 group-focus-within:w-full"></div>

@@ -13,17 +13,17 @@ export function FooterContact() {
             <address className="flex flex-col space-y-4 not-italic" itemScope
                 itemType="https://schema.org/Organization">
                 <div className="space-y-1">
-                    <p className="text-[9px] uppercase tracking-widest text-ash/30 font-bold">General Inquiries</p>
+                    <p className="text-[10px] uppercase tracking-widest text-ash/60 font-bold">General Inquiries</p>
                     <a
                         href="mailto:office@sinfonianobile.com"
                         itemProp="email"
-                        className="text-xs text-ash/60 hover:text-ivory focus-visible:text-gold-light outline-none transition-colors"
+                        className="text-xs text-ash/80 hover:text-gold-light focus-visible:text-gold-light outline-none transition-colors"
                     >
                         office@sinfonianobile.com
                     </a>
                 </div>
                 <div className="space-y-1">
-                    <p className="text-[9px] uppercase tracking-widest text-ash/30 font-bold">Press & Bookings</p>
+                    <p className="text-[10px] uppercase tracking-widest text-ash/60 font-bold">Press & Bookings</p>
                     <a
                         href="tel:+4315131513"
                         itemProp="telephone"
