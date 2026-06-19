@@ -2,12 +2,15 @@ import { useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { LuX } from 'react-icons/lu';
 
+import { useTicketOffcanvas } from '../../../context/useTicketOffcanvas';
+
 interface MobileMenuProps {
   isOpen: boolean;
   onClose: () => void;
 }
 
-export function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
+export default function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
+  const { openOffcanvas } = useTicketOffcanvas();
   const navItems = [
     { href: "#about", label: "The Orchestra" },
     { href: "#repertoire", label: "Repertoire" },
@@ -33,7 +36,7 @@ export function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          className="fixed inset-0 w-screen h-screen z-[100] bg-[#050505] flex flex-col items-center justify-center p-6 text-center"
+          className="fixed inset-0 w-screen h-screen z-100 bg-obsidian flex flex-col items-center justify-center p-6 text-center"
           role="dialog"
           aria-modal="true"
           aria-label="Mobile navigation menu"
@@ -58,15 +61,17 @@ export function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
               </a>
             ))}
             
-            <div className="w-12 h-[1px] bg-gold-light/30 my-4"></div>
+            <div className="w-12 h-px bg-gold-light/30 my-4"></div>
             
-            <a 
-              href="#tour" 
-              onClick={onClose} 
-              className="text-sm uppercase tracking-widest text-gold-light font-medium transition-colors"
+            <button 
+              onClick={() => {
+                onClose();
+                openOffcanvas();
+              }} 
+              className="text-sm uppercase tracking-widest text-gold-light font-medium transition-colors cursor-pointer"
             >
               Book Tickets
-            </a>
+            </button>
           </nav>
         </motion.div>
       )}

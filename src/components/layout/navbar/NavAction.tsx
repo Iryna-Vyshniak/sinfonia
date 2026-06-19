@@ -1,25 +1,22 @@
-import { cn } from "../../../lib/utils";
+import { cn } from '../../../lib/utils';
+import { useTicketOffcanvas } from '../../../context/useTicketOffcanvas';
 
 interface NavActionProps {
-    className?: string;
-    href?: string;
+  className?: string;
 }
 
-export function NavAction({ className, href = "#tour" }: NavActionProps) {
-    return (
-        <div className={cn("hidden md:flex items-center", className)}>
-            <a
-                href={href}
-                className={cn(
-                    "text-[11px] uppercase tracking-[0.2em] font-semibold text-ivory opacity-70 transition-all",
-                    "hover:opacity-100 hover:text-gold-light",
-                    "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold-light focus-visible:ring-offset-2 focus-visible:ring-offset-obsidian rounded-sm"
-                )}
-            >
-                Book Tickets
-            </a>
-        </div>
-    );
-}
+export default function NavAction({ className }: NavActionProps) {
+  const { openOffcanvas } = useTicketOffcanvas();
 
-export default NavAction;
+  return (
+    <div className={cn("hidden md:flex items-center", className)}>
+      <button 
+        onClick={() => openOffcanvas()}
+        className="text-[11px] uppercase tracking-[0.2em] font-semibold text-ivory opacity-70 hover:opacity-100 hover:text-gold-light transition-all"
+        aria-label="Book Tickets"
+      >
+        Book Tickets
+      </button>
+    </div>
+  );
+}

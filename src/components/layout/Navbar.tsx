@@ -5,8 +5,8 @@ import { cn } from '../../lib/utils';
 
 import { Logo } from './navbar/Logo';
 import { DesktopNav } from './navbar/NavLinks';
-import { NavAction } from './navbar/NavAction';
-import { MobileMenu } from './navbar/MobileMenu';
+import MobileMenu  from './navbar/MobileMenu';
+import NavAction  from './navbar/NavAction';
 
 
 /**
