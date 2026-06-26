@@ -1,17 +1,20 @@
-console.log('STRIPE_SECRET_KEY:', process.env.STRIPE_SECRET_KEY);
-console.log('ENV KEYS:', Object.keys(process.env).filter(key =>
-  key.includes('STRIPE')
-));
-
 import Stripe from "stripe";
 import type { VercelRequest, VercelResponse } from "@vercel/node";
 
-
+const TICKET_CATEGORIES = [
+    { id: 'vip', name: 'VIP Circle', price: 250 },
+    { id: 'parterre', name: 'Parterre', price: 150 },
+    { id: 'balcony', name: 'Balcony', price: 90 },
+];
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
-    // Configure CORS if necessary.
+    const origin = req.headers.origin;
+    
+    // Explicit CORS check instead of invalid wildcard + credentials match
     res.setHeader('Access-Control-Allow-Credentials', 'true');
-    res.setHeader('Access-Control-Allow-Origin', '*');
+    if (origin) {
+        res.setHeader('Access-Control-Allow-Origin', origin);
+    }
     res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS,PATCH,DELETE,POST,PUT');
     res.setHeader(
         'Access-Control-Allow-Headers',
@@ -19,8 +22,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     );
 
     if (req.method === 'OPTIONS') {
-         res.status(200).end();
-         return;
+         return res.status(200).end();
     }
 
     if (req.method !== "POST") {
@@ -29,44 +31,57 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
     try {
         const { items, tourDetails } = req.body;
-        if (!items || Object.keys(items).length === 0) {
+        if (!items || typeof items !== 'object' || Object.keys(items).length === 0) {
             return res.status(400).json({ error: "No tickets selected." });
         }
 
-        if (!process.env.STRIPE_SECRET_KEY) {
-            return res.status(400).json({ error: "STRIPE_SECRET_KEY is not configured." });
+        const secretKey = process.env.STRIPE_SECRET_KEY;
+        if (!secretKey) {
+            return res.status(500).json({ error: "Payment gateway configuration error." });
         }
 
-        const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
+        const stripe = new Stripe(secretKey, {
             apiVersion: "2026-05-27.dahlia",
         });
 
-        const ticketCategories = [
-            { id: 'vip', name: 'VIP Circle', price: 250 },
-            { id: 'parterre', name: 'Parterre', price: 150 },
-            { id: 'balcony', name: 'Balcony', price: 90 },
-        ];
+        let totalAmountCents = 0;
 
-        let amount = 0;
-        Object.entries(items).forEach(([catId, qty]) => {
-            const cat = ticketCategories.find(c => c.id === catId);
-            if (cat) amount += cat.price * (qty as number);
-        });
+        for (const [catId, qty] of Object.entries(items)) {
+            const quantity = Number(qty);
+            
+            // Critical Input Validation: Reject zero, negative numbers, non-integers, or malicious payloads
+            if (!Number.isInteger(quantity) || quantity <= 0) {
+                return res.status(400).json({ error: `Invalid ticket quantity specified for category: ${catId}` });
+            }
+
+            const category = TICKET_CATEGORIES.find(c => c.id === catId);
+            if (!category) {
+                return res.status(400).json({ error: `Unknown ticket category payload matching identifier: ${catId}` });
+            }
+
+            totalAmountCents += category.price * quantity * 100;
+        }
+
+        if (totalAmountCents === 0) {
+            return res.status(400).json({ error: "Total calculation cannot compute to zero base values." });
+        }
 
         const paymentIntent = await stripe.paymentIntents.create({
-            amount: amount * 100, // cents
+            amount: totalAmountCents,
             currency: "usd",
             metadata: {
-                tourId: tourDetails?.id || "",
-                city: tourDetails?.city || "",
+                tourId: String(tourDetails?.id || ""),
+                city: String(tourDetails?.city || ""),
             },
         });
 
-        res.status(200).json({
+        return res.status(200).json({
             clientSecret: paymentIntent.client_secret,
         });
     } catch (error) {
-        console.error("[PaymentIntent] Error:", error);
-        res.status(500).json({ error: error instanceof Error ? error.message : "Failed to create payment intent" });
+        console.error("[PaymentIntent Processing Error]:", error);
+        return res.status(500).json({ 
+            error: error instanceof Error ? error.message : "Internal system gateway exception occurred." 
+        });
     }
 }
